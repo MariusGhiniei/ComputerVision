@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 # ex 2) open, display its size, plot the image
+
 img = cv2.imread("lena.tif", cv2.IMREAD_COLOR)
 if img is None:
     print("Couldn't read the image ")
@@ -12,6 +13,7 @@ cv2.waitKey(0)
 
 #using plot
 # need rgb for plot
+
 imgRGB = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
 
 plt.imshow(imgRGB)

@@ -26,7 +26,7 @@ plt.show()
 blur3 = cv2.blur(img, (3,3))
 blur15 = cv2.blur(img, (15,15))
 
-plt.figure(figsize=(12,4))
+plt.figure("Blur", figsize=(12,4))
 
 plt.subplot(1,3,1)
 plt.imshow(imgRGB)
@@ -48,7 +48,7 @@ plt.show()
 blurGauss3 = cv2.GaussianBlur(img, (3,3), 0.1)
 blurGauss11 = cv2.GaussianBlur(img, (11,11), 4)
 
-plt.figure(figsize=(12,4))
+plt.figure("Gaussian blur", figsize=(12,4))
 
 plt.subplot(1,3,1)
 plt.imshow(imgRGB)
@@ -70,7 +70,7 @@ plt.show()
 blurMedian3 = cv2.medianBlur(img, 3)
 blurMedian15 = cv2.medianBlur(img,15)
 
-plt.figure(figsize=(12,4))
+plt.figure("Median blur", figsize=(12,4))
 
 plt.subplot(1,3,1)
 plt.imshow(imgRGB)
@@ -92,7 +92,7 @@ plt.show()
 blurBilateral1 = cv2.bilateralFilter(img, 3, 50, 50)
 blurBilateral2 = cv2.bilateralFilter(img, 15, 100, 100)
 
-plt.figure(figsize=(12,4))
+plt.figure("Bilateral", figsize=(12,4))
 
 plt.subplot(1,3,1)
 plt.imshow(imgRGB)
@@ -114,7 +114,7 @@ plt.show()
 kernelSharp1 = cv2.filter2D(img, ddepth = -1 , kernel = np.array([[0,-1,0], [-1,5,-1], [0,-1,0]]))
 kernelSharp2 = cv2.filter2D(img, ddepth = -1, kernel = np.array([[-1,-1,-1], [-1,9,-1], [-1,-1,-1]]))
 
-plt.figure(figsize=(12,4))
+plt.figure("Sharpen", figsize=(12,4))
 
 plt.subplot(1,3,1)
 plt.imshow(imgRGB)
@@ -149,7 +149,7 @@ rotate90c = cv2.rotate(img, cv2.ROTATE_90_CLOCKWISE)
 rotate90cc = cv2.rotate(img, cv2.ROTATE_90_COUNTERCLOCKWISE)
 rotate180c = cv2.rotate(img, cv2.ROTATE_180)
 
-plt.figure(figsize=(8,8))
+plt.figure("Rotation", figsize=(8,8))
 plt.subplot(2,2,1)
 plt.imshow(imgRGB)
 plt.title("The original photo")
@@ -180,7 +180,7 @@ def rotateByAngle(img, angle : float):
     return cv2.warpAffine(img, rotationMatrix, (w,h), borderMode=cv2.BORDER_REPLICATE)
 
 
-plt.figure(figsize=(8,4))
+plt.figure("Rotate by angle", figsize=(8,4))
 plt.subplot(1,2,1)
 plt.imshow(imgRGB)
 plt.title("The original photo")
@@ -194,7 +194,6 @@ plt.axis("off")
 
 plt.show()
 
-
 #ex 6 crop function
 
 def cropImage(img, x : int, y : int, width : int, height : int):
@@ -205,7 +204,7 @@ def cropImage(img, x : int, y : int, width : int, height : int):
 
     return img[y:yEnd, x:xEnd]
 
-plt.figure(figsize=(8,4))
+plt.figure("Crop", figsize=(8,4))
 plt.subplot(1,2,1)
 plt.imshow(imgRGB)
 plt.title("The original photo")

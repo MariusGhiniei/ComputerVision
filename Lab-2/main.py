@@ -5,6 +5,11 @@ import numpy as np
 img1 = cv2.imread("img.jpg", cv2.IMREAD_COLOR)
 img2 = cv2.imread("bkg.jpg", cv2.IMREAD_COLOR)
 
+if img1 is None:
+    print("Couldn't read the image ")
+if img2 is None:
+    print("Couldn't read the image ")
+
 grayScale1 = ((img1[:,:,0] + img1[:,:,1] + img1[:,:,2])/3).astype("uint8")
 #better to divide each, no overflow
 grayScale2 = (img1[:,:,0] / 3 + img1[:,:,1] / 3 + img1[:,:,2] / 3).astype("uint8")
@@ -162,20 +167,24 @@ plt.show()
 h, w = image.shape
 cimage = image.astype(float).copy()
 
-for y in range(h-1):
-    for x in range(1, w-1):
+for y in range(h):
+    for x in range(w):
         old = cimage[y,x]
-        if old < 128:
+        if old < 128.0:
             new = 0
-        else: new = 255
+        else: new = 255.0
 
         cimage[y, x] = new
         err = old - new
 
-        cimage[y, x + 1] = cimage[y, x + 1] + err * 7 / 16
-        cimage[y + 1, x - 1] =  cimage[y + 1, x - 1] + err * 3 / 16
-        cimage[y + 1, x] = cimage[y + 1, x] + err * 5 / 16
-        cimage[y + 1, x + 1] = cimage[y + 1, x + 1] + err * 1 / 16
+        if x + 1 < w:
+            cimage[y, x + 1] = cimage[y, x + 1] +  err * 7 / 16
+        if y + 1 < h and x - 1 >= 0:
+            cimage[y + 1, x - 1] = cimage[y + 1, x - 1] + err * 3 / 16
+        if y + 1 < h:
+            cimage[y + 1, x] = cimage[y + 1, x] + err * 5 / 16
+        if y + 1 < h and x + 1 < w:
+            cimage[y + 1, x + 1] = cimage[y + 1, x + 1] + err * 1 / 16
 
 imgFloyd = np.clip(cimage, 0, 255).astype("uint8")
 
@@ -187,24 +196,32 @@ cimage = image.astype(float).copy()
 for y in range(h-1):
     for x in range(2, w-2):
         old = cimage[y, x]
-        if old < 128:
+        if old < 128.0:
             new = 0
-        else: new = 255
+        else: new = 255.0
 
         cimage[y, x] = new
         err = old - new
 
         #row y
-        cimage[y, x + 1] = cimage[y, x + 1] + err * 8 / 32
-        cimage[y, x + 2] = cimage[y, x + 2] + err * 4 / 32
+        if x + 1 < w:
+            cimage[y, x + 1] = cimage[y, x + 1] + err * (8 / 32)
+        if x + 2 < w:
+            cimage[y, x + 2] = cimage[y, x + 2] + err * (4 / 32)
 
         #row y + 1
 
-        cimage[y + 1, x - 2] = cimage[y + 1, x - 2] + err * 2 / 32
-        cimage[y + 1, x - 1] = cimage[y + 1, x - 1] + err * 4 / 32
-        cimage[y + 1, x] = cimage[y + 1, x] + err * 8 / 32
-        cimage[y + 1, x + 1] = cimage[y + 1, x + 1] + err * 4 / 32
-        cimage[y + 1, x + 2] = cimage[y + 1, x +2] + err * 2 / 32
+        if y + 1 < h:
+            if x - 2 >= 0:
+                cimage[y + 1, x - 2] = cimage[y + 1, x - 2] + err * (2 / 32)
+            if x - 1 >= 0:
+                cimage[y + 1, x - 1] = cimage[y + 1, x - 1] + err * (4 / 32)
+
+            cimage[y + 1, x] = cimage[y + 1, x] + err * (8 / 32)
+            if x + 1 < w:
+                cimage[y + 1, x + 1] = cimage[y + 1, x + 1] +err * (4 / 32)
+            if x + 2 < w:
+                cimage[y + 1, x + 2] = cimage[y + 1, x + 2] + err * (2 / 32)
 
 imgBurkes = np.clip(cimage, 0, 255).astype("uint8")
 

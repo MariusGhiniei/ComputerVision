@@ -2,7 +2,9 @@ import cv2
 import numpy as np
 import matplotlib.pyplot as plt
 
-img = cv2.imread("grayMan.jpg", cv2.IMREAD_GRAYSCALE)
+#img = cv2.imread("grayMan.jpg", cv2.IMREAD_GRAYSCALE)
+img = cv2.imread("medical.jpg", cv2.IMREAD_GRAYSCALE)
+
 h, w = img.shape
 colored1 = np.zeros((h,w,3), dtype = np.uint8)
 colored2 = np.zeros((h,w,3), dtype = np.uint8)

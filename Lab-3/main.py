@@ -28,7 +28,7 @@ def yCbCrPixelMethod(R,G,B):
     return Y > 80 and Cb > 85 and Cb < 135 and Cr > 135 and Cr < 180
 
 localPath = "/Users/marius/PycharmProjects/CV-lab1/Lab-3/photos"
-outputFolder = "/Users/marius/PycharmProjects/CV-lab1/Lab-3/outputMasks"
+outputFolder = "/Users/marius/PycharmProjects/CV-lab1/Lab-3/outputMasksFace"
 for image in os.listdir(localPath):
     if image.endswith(".jpg"):
         imagePath = os.path.join(localPath, image)

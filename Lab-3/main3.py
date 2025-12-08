@@ -18,15 +18,6 @@ def hsvPixelMethod(R,G,B):
 
     return H >= 0 and H <= 50 and S >= 0.23 and S <= 0.68 and V >= 0.35 and V <= 1
 
-def removeNoise(mask):
-    mask = (mask > 0).astype(np.uint8) * 255
-    # median or morphology (both help; you can tweak)
-    mask = cv2.medianBlur(mask, 5)
-    k = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (7, 7))
-    mask = cv2.morphologyEx(mask, cv2.MORPH_OPEN, k, iterations=1)
-    mask = cv2.morphologyEx(mask, cv2.MORPH_CLOSE, k, iterations=2)
-    return mask
-
 def yCbCrPixelMethod(R,G,B):
     Y = 0.299 * R + 0.587 * G + 0.114 * B
     Cb = -0.1687 * R - 0.3313 * G + 0.5 * B + 128
@@ -58,7 +49,6 @@ def converToMask(image, method):
                 else:
                     mask[y, x] = 0
             else: raise ValueError("Unknown method " + str(method))
-    removeNoise(mask)
     return mask
 
 def rectToSquare(x,y, w, h, W, H):
@@ -84,6 +74,7 @@ def faceSquare(mask):
 
 def detectSquare(image):
     mask = converToMask(image, "RGB")
+    cv2.imshow("mask", mask)
     #mask = converToMask(image, "HSV")
     # mask = converToMask(image, "YCbCr")
 
@@ -98,9 +89,11 @@ def drawSquare(image, square):
 
     return out
 
-img = cv2.imread("photos/5.jpg", cv2.COLOR_BGR2RGB)
+# img = cv2.imread("photos/5.jpg", cv2.COLOR_BGR2RGB)
 # img = cv2.imread("photos/2.jpg", cv2.COLOR_BGR2RGB)
-img = cv2.imread("/Users/marius/PycharmProjects/CV-lab1/Lab-3/Face_Dataset/Pratheepan_Dataset/FacePhoto/124511719065943_2.jpg", cv2.COLOR_BGR2RGB)
+# img = cv2.imread("/Users/marius/PycharmProjects/CV-lab1/Lab-3/Face_Dataset/Pratheepan_Dataset/FacePhoto/124511719065943_2.jpg", cv2.COLOR_BGR2RGB)
+img = cv2.imread("/Users/marius/PycharmProjects/CV-lab1/Lab-3/photos/portrait.jpg", cv2.COLOR_BGR2RGB)
+
 square = detectSquare(img)
 imageDraw = drawSquare(img, square)
 cv2.imshow("Detect Face", imageDraw)

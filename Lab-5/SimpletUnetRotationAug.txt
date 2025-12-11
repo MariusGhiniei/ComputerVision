@@ -1,0 +1,30 @@
+
+ Total params: 31,054,145 (118.46 MB)
+ Trainable params: 31,042,369 (118.42 MB)
+ Non-trainable params: 11,776 (46.00 KB)
+Epoch 1/10
+268/268 ━━━━━━━━━━━━━━━━━━━━ 76s 170ms/step - accuracy: 0.9225 - loss: 1.2355 - val_accuracy: 0.9827 - val_loss: 1.1567
+Epoch 2/10
+268/268 ━━━━━━━━━━━━━━━━━━━━ 43s 162ms/step - accuracy: 0.9783 - loss: 0.8600 - val_accuracy: 0.9744 - val_loss: 0.9942
+Epoch 3/10
+268/268 ━━━━━━━━━━━━━━━━━━━━ 44s 163ms/step - accuracy: 0.9830 - loss: 0.7086 - val_accuracy: 0.9869 - val_loss: 0.7083
+Epoch 4/10
+268/268 ━━━━━━━━━━━━━━━━━━━━ 43s 162ms/step - accuracy: 0.9860 - loss: 0.5922 - val_accuracy: 0.9882 - val_loss: 0.4957
+Epoch 5/10
+268/268 ━━━━━━━━━━━━━━━━━━━━ 44s 162ms/step - accuracy: 0.9889 - loss: 0.4881 - val_accuracy: 0.9902 - val_loss: 0.4660
+Epoch 6/10
+268/268 ━━━━━━━━━━━━━━━━━━━━ 44s 163ms/step - accuracy: 0.9894 - loss: 0.4318 - val_accuracy: 0.9892 - val_loss: 0.4455
+Epoch 7/10
+268/268 ━━━━━━━━━━━━━━━━━━━━ 43s 162ms/step - accuracy: 0.9898 - loss: 0.4142 - val_accuracy: 0.9909 - val_loss: 0.3914
+Epoch 8/10
+268/268 ━━━━━━━━━━━━━━━━━━━━ 43s 162ms/step - accuracy: 0.9907 - loss: 0.3572 - val_accuracy: 0.9905 - val_loss: 0.3660
+Epoch 9/10
+268/268 ━━━━━━━━━━━━━━━━━━━━ 43s 162ms/step - accuracy: 0.9910 - loss: 0.3480 - val_accuracy: 0.9878 - val_loss: 0.4106
+Epoch 10/10
+268/268 ━━━━━━━━━━━━━━━━━━━━ 43s 162ms/step - accuracy: 0.9917 - loss: 0.3180 - val_accuracy: 0.9918 - val_loss: 0.3300
+Training time for 10 epochs: 7.80 minutes
+115/115 ━━━━━━━━━━━━━━━━━━━━ 6s 41ms/step
+========== FINAL METRICS (MEAN OVER TEST SET) ==========
+Mean Pixel Accuracy: 0.9917673524997594
+Mean IoU (Jaccard): 0.5743314248588751
+Mean Dice Coefficient: 0.6651642546636948

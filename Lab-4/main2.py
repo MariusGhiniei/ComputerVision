@@ -55,14 +55,13 @@ def matchDescriptors(des1, des2, method="SIFT", knn=False, k=2, ratio=0.75):
         matches = sorted(matches, key=lambda x: x.distance)
         return matches, matches
 
-# ======================= Ex 2 =======================
-
+# == ex 2 ==
 datasetPath   = "/Users/marius/PycharmProjects/CV-lab1/Lab-4/IIT_DB_selectie"
 trainDirPath  = os.path.join(datasetPath, "train")
 testDirPath   = os.path.join(datasetPath, "test")
 
 method      = "SIFT"
-matcherType = "knn"   # "knn" sau "bf"
+matcherType = "knn"  # "bf"
 
 
 def loadImages(baseDir):
@@ -97,7 +96,7 @@ def getFeatureList(imgList, method="SIFT"):
         # keypoints
         kp = detectKeyPoints(gray, method)
         if kp is None or len(kp) == 0:
-            print(f" {method} nu a găsit niciun keypoint în {path}")
+            print(f" {method} nu a gasit niciun keypoint în {path}")
             des = None
         else:
             # descriptors
@@ -116,14 +115,12 @@ def getFeatureList(imgList, method="SIFT"):
     return data
 
 
-print("\n=== Calculăm keypoints + descriptori pentru TRAIN ===")
+print("\n -> Calculam keypoints + descriptori pentru TRAIN <-")
 train_data = getFeatureList(trainList, method)
 
-print("\n=== Calculăm keypoints + descriptori pentru TEST ===")
+print("\n -> Calculam keypoints + descriptori pentru TEST <-")
 test_data  = getFeatureList(testList, method)
 
-
-# ---------- 2b – matching ----------
 
 def countGoodMatches(desTest, desTrain, method="SIFT", matcherType="knn"):
 
@@ -145,7 +142,7 @@ def classify(testItem, trainData, method="SIFT", matcherType="knn"):
     pathTest = testItem["path"]
 
     if desTest is None:
-        print(f"[INFO] Test image fără descriptori: {pathTest}")
+        print(f"Test image fara descriptori: {pathTest}")
         return None, []
 
     scores = []  # (num_matches, label_train, path_train)
@@ -159,21 +156,20 @@ def classify(testItem, trainData, method="SIFT", matcherType="knn"):
     if not scores:
         return None, []
 
-    # 2.c – găsim maximul de match-uri
+    # 2c - max de match uri
     maxMatches = max(s[0] for s in scores)
     best = [s for s in scores if s[0] == maxMatches]
 
     return best, scores
 
 
-# ---------- 2d – alegerea etichetei ----------
 
 def decideLabelBest(bestList):
-    """
-    bestList = [(num_matches, label, path), ...] toate cu același nr de match-uri maxim
-    - un singur element -> luăm label-ul direct
-    - altfel -> votăm după label; în caz de paritate -> random
-    """
+
+    # bestList = [(num_matches, label, path), ...] toate cu același nr de match-uri maxim
+    # - un singur element -> label-ul direct
+    # - altfel -> votăm după label; în caz de paritate -> random
+
     if len(bestList) == 0:
         return None, False, []
 
@@ -188,22 +184,21 @@ def decideLabelBest(bestList):
     if len(candidateLabels) == 1:
         return candidateLabels[0], False, []
     else:
-        chosen   = random.choice(candidateLabels)
+        chosen = random.choice(candidateLabels)
         tiePaths = [b[2] for b in bestList if b[1] in candidateLabels]
         return chosen, True, tiePaths
 
 
-# ---------- 2e – clasificare completă + acuratețe ----------
+# 2e – clasificare + acuratețe
 
-yTrue        = []
-yPred        = []
-parityCases  = []
-noKpCases    = []
-labelsSet    = set()
+yTrue = []
+yPred = []
+parityCases = []
+noKpCases = []
+labelsSet = set()
 
 print(f"\n=== CLASIFICARE folosind metoda {method} și matcher {matcherType} ===\n")
 
-# ATENȚIE: aici iterăm peste test_data, nu testList!
 for testItem in test_data:
     trueLabel = testItem["label"]
     labelsSet.add(trueLabel)
@@ -213,7 +208,7 @@ for testItem in test_data:
     best, scores = classify(testItem, train_data, method=method, matcherType=matcherType)
 
     if best is None:
-        print(f"[INFO] {pathTest} NU poate fi clasificat (fără descriptori). Atribui etichetă random.")
+        print(f" {pathTest} NU poate fi clasificat (nu are descriptori). Atribui eticheta random.")
         noKpCases.append(pathTest)
         trainLabels = [tr["label"] for tr in train_data if tr["descriptors"] is not None]
         if not trainLabels:
@@ -222,8 +217,8 @@ for testItem in test_data:
     else:
         predLabel, parityFlag, tiePaths = decideLabelBest(best)
         if parityFlag:
-            print(f"[PARITATE] pentru imaginea de test {pathTest}")
-            print("   Imagini de train implicate în paritate:")
+            print(f" Pentru imaginea de test {pathTest}")
+            print(" Imagini de train implicate în paritate:")
             for p in tiePaths:
                 print("     ", p)
             parityCases.append(pathTest)
@@ -231,15 +226,14 @@ for testItem in test_data:
     yTrue.append(trueLabel)
     yPred.append(predLabel)
 
-# ---------- acuratețe ----------
 correct  = sum(1 for t, p in zip(yTrue, yPred) if t == p)
 accuracy = correct / len(yTrue) if yTrue else 0.0
 print(f"\nAcuratețe (metoda={method}, matcher={matcherType}): {accuracy * 100:.2f}%")
 
-# ---------- matrice de confuzie ----------
-labels       = sorted(list(labelsSet))
+#confusion matrix
+labels = sorted(list(labelsSet))
 label_to_idx = {l: i for i, l in enumerate(labels)}
-cm           = np.zeros((len(labels), len(labels)), dtype=int)
+cm = np.zeros((len(labels), len(labels)), dtype=int)
 
 for t, p in zip(yTrue, yPred):
     i = label_to_idx[t]
@@ -250,10 +244,10 @@ print("\nEtichete (ordine în matrice):", labels)
 print("Confusion matrix (rows = TRUE, cols = PREDICTED):")
 print(cm)
 
-print("\nImagini de test cu PARITATE la vot (dacă există):")
+print("\n Imagini de test cu PARITATE la vot (dacă exista):")
 for p in parityCases:
     print("  ", p)
 
-print("\nImagini de test fără keypoints/descriptori (dacă există):")
+print("\n Imagini de test fara keypoints/descriptori (dacă exista):")
 for p in noKpCases:
     print("  ", p)

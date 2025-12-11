@@ -72,7 +72,7 @@ datasetPath   = "/Users/marius/PycharmProjects/CV-lab1/Lab-4/IIT_DB_selectie"
 trainDirPath  = os.path.join(datasetPath, "train")
 testDirPath   = os.path.join(datasetPath, "test")
 
-outputRoot    = os.path.join(datasetPath, "output_results_v2")
+outputRoot = os.path.join(datasetPath, "output_results_v2")
 os.makedirs(outputRoot, exist_ok=True)
 
 def loadImages(baseDir):
@@ -105,7 +105,7 @@ def getFeatureList(imgList, method="SIFT"):
 
         kp = detectKeyPoints(gray, method)
         if kp is None or len(kp) == 0:
-            print(f"{method} nu a găsit niciun keypoint în {path}")
+            print(f"{method} nu a gasit niciun keypoint în {path}")
             des = None
         else:
             des = computeDescriptors(gray, kp, method)
@@ -141,7 +141,7 @@ def classify(testItem, trainData, method="SIFT", matcherType="knn"):
     pathTest = testItem["path"]
 
     if desTest is None:
-        print(f"[INFO] Test image fără descriptori: {pathTest}")
+        print(f"Test image fara descriptori: {pathTest}")
         return None, []
 
     scores = []  # (num_matches, label_train, path_train)
@@ -162,9 +162,6 @@ def classify(testItem, trainData, method="SIFT", matcherType="knn"):
 
 
 def decideLabelBest(bestList):
-    """
-    bestList = [(num_matches, label, path), ...]
-    """
     if len(bestList) == 0:
         return None, False, []
 
@@ -259,7 +256,6 @@ for method in methods:
     trainData = getFeatureList(trainList, method)
     testData  = getFeatureList(testList, method)
 
-    # dicționar pentru acces rapid la imaginile din train după path
     trainImagePath = {d["path"]: d["image"] for d in trainData}
 
     for matcherType in matcherTypes:
@@ -267,11 +263,11 @@ for method in methods:
         print(f"=== CLASIFICARE folosind metoda {method} și matcher {matcherType} ===")
         print("-" * 70)
 
-        yTrue       = []
-        yPred       = []
+        yTrue = []
+        yPred = []
         parityCases = []
-        noKpCases   = []
-        labelsSet   = set()
+        noKpCases = []
+        labelsSet = set()
 
         total_matches_all_tests = 0
         total_tests_with_matches = 0
@@ -292,7 +288,7 @@ for method in methods:
                 total_tests_with_matches += 1
 
             if best is None:
-                print(f"{pathTest} NU poate fi clasificat(nu avem descriptori), atribui eticheta aleator.")
+                print(f"{pathTest} NU poate fi clasificat(nu avem descriptori), atribui eticheta random.")
                 noKpCases.append(pathTest)
                 trainLabels = [tr["label"] for tr in trainData if tr["descriptors"] is not None]
                 if not trainLabels:
@@ -301,8 +297,8 @@ for method in methods:
             else:
                 predLabel, parityFlag, tiePaths = decideLabelBest(best)
                 if parityFlag:
-                    print(f"[PARITATE] pentru imaginea de test {pathTest}")
-                    print("   Imagini de train implicate în paritate:")
+                    print(f" Pentru imaginea de test {pathTest}")
+                    print("  Imagini de train implicate în paritate:")
                     for p in tiePaths:
                         print("     ", p)
                     parityCases.append(pathTest)
@@ -354,7 +350,7 @@ for method in methods:
         for p in parityCases:
             print("  ", p)
 
-        print("\nImagini de test fără keypoints/descriptori :")
+        print("\nImagini de test fara keypoints/descriptori :")
         for p in noKpCases:
             print("  ", p)
 
@@ -397,4 +393,3 @@ with open(best_path, "w") as f:
             f"Match-uri medii = {r['avg_matches']:.2f}\n"
         )
 
-print("\nbBest results saved in:", best_path)

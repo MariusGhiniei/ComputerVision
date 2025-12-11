@@ -112,7 +112,7 @@ counts_harris = keypointsGridStats(kp_harris, gray.shape, grid_size=8)
 print("Distribuție pe grid 8x8 pentru HARRIS:")
 print(counts_harris, "\n")
 
-# ======= image functions ========
+# image functions
 def blurMean(img, size=5):
     return cv2.blur(img, (size, size))
 
@@ -175,23 +175,22 @@ def pair(transform_name, img2, method="SIFT"):
     gray1 = gray
     gray2 = cv2.cvtColor(img2, cv2.COLOR_BGR2GRAY)
 
-    # 2. detect
+    # detect
     kp1 = detectKeyPoints(gray1, method)
     kp2 = detectKeyPoints(gray2, method)
 
-    # 3. compute descriptors
+    # compute descriptors
     des1 = computeDescriptors(gray1, kp1, method)
     des2 = computeDescriptors(gray2, kp2, method)
 
-    # 4. matching BF
+    # matching BF
     m_bf, good_bf = matchDescriptors(des1, des2, method=method, knn=False)
-    # 4. matching kNN
+    # matching kNN
     m_knn, good_knn = matchDescriptors(des1, des2, method=method, knn=True)
 
     print(f"BF matches: {len(good_bf)}")
     print(f"kNN good matches: {len(good_knn)}")
 
-    # opțional: afișăm câteva match-uri kNN
     if len(good_knn) > 0:
         drawMatches(gray1, kp1, gray2, kp2, good_knn,
                      f"{transform_name} - kNN good matches")
